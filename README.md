@@ -1,4 +1,4 @@
-# 💰 Personal Expense Tracker API
+# Personal Expense Tracker API
 
 ![Go](https://img.shields.io/badge/Go-1.22+-00ADD8?style=for-the-badge&logo=go)
 ![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)
@@ -9,27 +9,7 @@ A lightning-fast, highly concurrent RESTful API for managing personal expenses, 
 
 ---
 
-## 📸 See it in Action
-
-Here are some real-world interactions with the API using PowerShell/Postman:
-
-<details>
-<summary><b>Click to expand Screenshots</b></summary>
-<br>
-
-*(API interactions captured from live terminal)*
-
-| | |
-| :---: | :---: |
-| ![Action 1](Screenshot%202026-08-01%20014845.png) | ![Action 2](Screenshot%202026-08-01%20014900.png) |
-| ![Action 3](Screenshot%202026-08-01%20014905.png) | ![Action 4](Screenshot%202026-08-01%20015051.png) |
-| ![Action 5](Screenshot%202026-08-01%20015119.png) | |
-
-</details>
-
----
-
-## ✨ Core Features
+## Core Features
 
 - **Standard Library Only**: Built using Go 1.22's enhanced `http.ServeMux` for routing. Zero external dependencies (`uuid` bypassed for native `crypto/rand`).
 - **Thread-Safe**: Uses `sync.RWMutex` to safely handle hundreds of concurrent read/write requests.
@@ -40,7 +20,7 @@ Here are some real-world interactions with the API using PowerShell/Postman:
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Option 1: Run Locally (Bare Metal)
 Ensure you have Go 1.22+ installed.
@@ -57,9 +37,11 @@ docker-compose up -d
 ```
 The server will be available on port `8080`, and data will be safely persisted to the `expense_data` Docker volume.
 
+![Server and Setup Context](Screenshot%202026-08-01%20014900.png)
+
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 All requests and responses use `application/json`.
 
@@ -74,13 +56,22 @@ Creates a new expense.
   "date": "2026-08-01"
 }
 ```
+![Creating an Expense](Screenshot%202026-08-01%20014845.png)
 
 ### `GET /expenses`
 Retrieves all expenses in their exact insertion order.
+
+![Listing all Expenses](Screenshot%202026-08-01%20014905.png)
+
 - **Query Parameter (Optional):** `?category=food` (Case-insensitive)
+
+![Filtering Expenses by Category](Screenshot%202026-08-01%20015051.png)
 
 ### `GET /expenses/total`
 Calculates the total sum of all expenses (strictly adhering to IEEE 754 float rounding).
+
+![Calculating Totals](Screenshot%202026-08-01%20015119.png)
+
 - **Query Parameter (Optional):** `?category=travel`
 
 ### `DELETE /expenses/{id}`
@@ -88,7 +79,7 @@ Removes an expense by its unique ID. Returns `204 No Content` on success.
 
 ---
 
-## 🧪 Testing
+## Testing
 
 The project includes an exhaustive suite covering handlers, persistence edge cases (corrupt file recovery), validation boundaries, and concurrency data-race checks.
 
@@ -102,7 +93,7 @@ go test ./tests/... -race -v
 
 ---
 
-## 🏗️ Architecture & Technical Decisions
+## Architecture & Technical Decisions
 
 - **In-Memory + File DB**: To avoid external database dependencies while satisfying the persistence requirement, the system uses a local `expenses.json` file. 
 - **Preserving Insertion Order**: Go maps randomize iteration. To satisfy the specification's insertion-order guarantee, the store pairs a `map[string]models.Expense` (for O(1) lookups) with a supplementary `order []string` slice.

@@ -1,0 +1,144 @@
+openapi: 3.0.3
+info:
+  title: Personal Expense Tracker API
+  version: 1.0.0
+  description: A REST API for managing personal expenses.
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+paths:
+  /expenses:
+    post:
+      summary: Create a new expense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateExpenseRequest'
+      responses:
+        '201':
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      summary: List all expenses
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filter expenses by category (case-insensitive)
+      responses:
+        '200':
+          description: A list of expenses in insertion order
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expense'
+  /expenses/total:
+    get:
+      summary: Get the total of all expenses
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filter the total by category (case-insensitive)
+      responses:
+        '200':
+          description: The total amount, rounded to two decimal places
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total:
+                    type: number
+                    format: float
+                    example: 4.5
+  /expenses/{id}:
+    delete:
+      summary: Delete an expense
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The ID of the expense to delete
+      responses:
+        '204':
+          description: Successfully deleted (no content)
+        '400':
+          description: Missing ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Expense not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    Expense:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f013ac6ab3413c9afac9ee0504a3afae
+        title:
+          type: string
+          example: Coffee
+        amount:
+          type: number
+          format: float
+          example: 4.5
+        category:
+          type: string
+          example: Food
+        date:
+          type: string
+          format: date
+          example: "2026-07-31"
+    CreateExpenseRequest:
+      type: object
+      required:
+        - title
+        - amount
+        - category
+        - date
+      properties:
+        title:
+          type: string
+          example: Coffee
+        amount:
+          type: number
+          format: float
+          example: 4.5
+        category:
+          type: string
+          example: Food
+        date:
+          type: string
+          format: date
+          example: "2026-07-31"
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: title is required

@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      DATA_FILE: "/data/expenses.json"
+    volumes:
+      # Named volume so expenses.json persists across `docker-compose down` /
+      # `docker-compose up` cycles. The app's os.MkdirAll creates /data if
+      # it doesn't exist yet; the volume mount supplies the directory.
+      - expense_data:/data
+    restart: unless-stopped
+    # Healthcheck: hit GET /expenses every 30s. A 200 means the store loaded
+    # and the HTTP server is accepting connections.
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/expenses || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+volumes:
+  expense_data:
+    driver: local

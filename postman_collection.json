@@ -1,0 +1,170 @@
+{
+	"info": {
+		"_postman_id": "c613fa89-42b4-4b53-9d41-3b7c7b7468d0",
+		"name": "Personal Expense Tracker API",
+		"description": "Complete test suite for the Go Expense Tracker REST API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Create Expense (Success)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Coffee\",\n    \"amount\": 4.50,\n    \"category\": \"Food\",\n    \"date\": \"2026-07-31\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/expenses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses"
+					]
+				}
+			}
+		},
+		{
+			"name": "2. Create Expense (Validation Error - Missing Title)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 4.50,\n    \"category\": \"Food\",\n    \"date\": \"2026-07-31\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/expenses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses"
+					]
+				}
+			}
+		},
+		{
+			"name": "3. List All Expenses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/expenses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses"
+					]
+				}
+			}
+		},
+		{
+			"name": "4. List Expenses by Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/expenses?category=food",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "food"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "5. Get Total Expenses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/expenses/total",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses",
+						"total"
+					]
+				}
+			}
+		},
+		{
+			"name": "6. Get Total by Category",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/expenses/total?category=food",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses",
+						"total"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "food"
+						}
+					]
+				}
+			}
+		},
+		{
+			"name": "7. Delete Expense",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/expenses/REPLACE_WITH_EXPENSE_ID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses",
+						"REPLACE_WITH_EXPENSE_ID"
+					]
+				},
+				"description": "Copy an ID from the 'List All Expenses' response and replace REPLACE_WITH_EXPENSE_ID in the URL with it."
+			}
+		}
+	]
+}
